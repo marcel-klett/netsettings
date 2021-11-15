@@ -1,0 +1,28 @@
+[user]
+	email = m.klett@fkf.mpg.de
+[credential]
+	helper = store
+[core]
+	editor = emacs -nw
+[diff]
+	algorithm = histogram
+	wsErrorHighlight = all
+	colorMoved = default
+[fetch]
+	prune = true
+[grep]
+	lineNumber = true
+	fallbackToNoIndex = true
+[init]
+	defaultBranch = master
+[log]
+	decorate = true
+[push]
+	default = current
+[rebase]
+	autoStash = true
+	autoSquash = true
+[rerere]
+	enabled = true
+[status]
+	showUntrackedFiles = no

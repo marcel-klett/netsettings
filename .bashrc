@@ -126,3 +126,11 @@ export EDITOR='emacs -nw'
 
 # netsettings
 alias netsettings='git --git-dir="${XDG_DATA_HOME:-$HOME/.local/share}/netsettings/git" --work-tree="${HOME}"'
+if declare -f _completion_loader &>/dev/null; then
+	_completion_loader git
+	if type __git_wrap__git_main &>/dev/null; then
+		complete -o default -o nospace -F __git_wrap__git_main netsettings
+	elif type _git &>/dev/null; then
+		complete -o default -o nospace -F _git netsettings
+	fi
+fi

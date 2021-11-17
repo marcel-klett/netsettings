@@ -129,8 +129,10 @@
 
 
 
-(add-to-list 'custom-theme-load-path "/home/marcel/.emacs.d/themes")
-(load-theme 'nimbus t)
+(use-package nimbus-theme
+  :ensure t
+  :config
+  (load-theme 'nimbus t))
 ; (package-dl 'zenburn-theme)
 ; (require 'zenburn-theme)
 (put 'upcase-region 'disabled nil)
@@ -140,12 +142,26 @@
 (setq mouse-sel-mode t)
 (defun track-mouse(e))
 (unless (window-system)
-  (global-set-key (kbd "<mouse-4>") 'mwheel-scroll)
-  (global-set-key (kbd "<mouse-5>") 'mwheel-scroll)
-  (global-set-key (kbd "<C-mouse-4>") 'mouse-wheel-text-scale)
-  (global-set-key (kbd "<C-mouse-5>") 'mouse-wheel-text-scale)
-  (global-set-key (kbd "<S-mouse-4>") 'mwheel-scroll)
-  (global-set-key (kbd "<S-mouse-5>") 'mwheel-scroll))
+  (defun user/mwheel-scroll (&rest args)
+    "Wraps `mwheel-scroll' for use with <mouse-4> and <mouse-5>."
+    (interactive (advice-eval-interactive-spec
+                  (cadr (interactive-form 'mwheel-scroll))))
+    (let ((mouse-wheel-down-event 'mouse-4)
+          (mouse-wheel-up-event 'mouse-5))
+      (apply 'mwheel-scroll args)))
+  (defun user/mouse-wheel-text-scale (&rest args)
+    "Wraps `mouse-wheel-text-scale' for use with <mouse-4> and <mouse-5>."
+    (interactive (advice-eval-interactive-spec
+                  (cadr (interactive-form 'mouse-wheel-text-scale))))
+    (let ((mouse-wheel-down-event 'mouse-4)
+          (mouse-wheel-up-event 'mouse-5))
+      (apply 'mouse-wheel-text-scale args)))
+  (global-set-key (kbd "<mouse-4>") 'user/mwheel-scroll)
+  (global-set-key (kbd "<mouse-5>") 'user/mwheel-scroll)
+  (global-set-key (kbd "<C-mouse-4>") 'user/mouse-wheel-text-scale)
+  (global-set-key (kbd "<C-mouse-5>") 'user/mouse-wheel-text-scale)
+  (global-set-key (kbd "<S-mouse-4>") 'user/mwheel-scroll)
+  (global-set-key (kbd "<S-mouse-5>") 'user/mwheel-scroll))
 
 ;; paren
 (setq show-paren-delay 0)

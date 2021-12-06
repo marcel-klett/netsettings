@@ -191,11 +191,30 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
    (quote
-    (whichkey which-key projectile multiple-cursors nimbus-theme lsp-mode jedi irony-eldoc company-irony-c-headers company-irony))))
+    (xclip tree-sitter-langs tree-sitter whichkey which-key projectile multiple-cursors nimbus-theme lsp-mode jedi irony-eldoc company-irony-c-headers company-irony))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:background nil)))))
+
+
+;; Tree-sitter needs dynamic module loading
+(when (and (functionp 'module-load) (bound-and-true-p module-file-suffix))
+  (use-package tree-sitter
+    :ensure t
+    :config (global-tree-sitter-mode))
+  (use-package tree-sitter-langs
+    :ensure t
+    :after tree-sitter
+    :config (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
+
+
+(use-package xclip
+  :ensure t
+  :config
+  (condition-case err
+      (xclip-mode 1)
+    (file-error (message "file-error: %S" err))))
 

@@ -89,7 +89,11 @@ if ! echo $PATH | egrep -q "(^|:)$HOME/bin($|:)" ; then
 fi
 
 load_triqs3(){
-source /home/mklett/source/triqs3/triqs3_install/share/triqsvars.sh
+    if [ -f ~/spack/share/spack/setup-env.sh ]; then
+	. ~/spack/share/spack/setup-env.sh
+	spack load gcc
+    fi
+    . ~/source/triqs_cdmft_auto_corr/install/share/triqs/triqsvars.sh
 }    
 
 load_triqs2(){

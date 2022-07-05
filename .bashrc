@@ -89,11 +89,8 @@ if ! echo $PATH | egrep -q "(^|:)$HOME/bin($|:)" ; then
 fi
 
 load_triqs3(){
-    if [ -f ~/spack/share/spack/setup-env.sh ]; then
-	. ~/spack/share/spack/setup-env.sh
-	spack load gcc
-    fi
-    . ~/source/triqs_cdmft_auto_corr/install/share/triqs/triqsvars.sh
+    . /usr/lib64/mpi/gcc/openmpi2/bin/mpivars.sh
+    . ~/source/triqs_new_cdmft/install/share/triqs/triqsvars.sh
 }    
 
 load_triqs2(){
@@ -138,3 +135,26 @@ if declare -f _completion_loader &>/dev/null; then
 		complete -o default -o nospace -F _git netsettings
 	fi
 fi
+
+# direnv
+if command -v direnv >/dev/null; then
+	eval "$(direnv hook bash)"
+fi
+
+# history
+shopt -s cmdhist
+shopt -s histappend
+shopt -s lithist
+HISTCONTROL=ignoreboth:erasedups
+HISTTIMEFORMAT="%F %T %z "
+HISTSIZE=
+HISTFILESIZE=
+
+# Keybindings
+bind '"\e[A": history-search-backward' &>/dev/null
+bind '"\e[B": history-search-forward' &>/dev/null
+bind '"\eq": kill-whole-line' &>/dev/null
+
+
+export SQUEUE_FORMAT="%.10i %.9P %50j %.8u %.2t %.10M %.6D %R"
+export SQUEUE_SORT=i
